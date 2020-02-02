@@ -1,0 +1,286 @@
+
+* {
+    font-family: Helvetica, Arial, sans-serif;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+}
+
+
+@media screen and (max-width: 500px) {
+    h2 {
+        font-size: 7vmin;
+    }
+}
+
+#game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background: url(room.svg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    overflow: hidden;
+}
+
+html, body, #game-container {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+.body,
+.wrapper {
+  /* Break the flow */
+  position: absolute;
+  top: 0px;
+
+  /* Give them all the available space */
+  width: 100%;
+  height: 100%;
+
+  /* Remove the margins if any */
+  margin: 0;
+
+  /* Allow them to scroll down the document */
+  overflow: hidden;
+}
+
+.body {
+  /* Sending body at the bottom of the stack */
+  z-index: 1;
+}
+
+.wrapper {
+  /* Making the wrapper stack above the body */
+  z-index: 2;
+}
+
+
+@keyframes fuzzybounce {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    12.5% {
+        transform: translate(-2px, 2px) scale(0.99);
+    }
+    25% {
+        transform: translate(-4px, 0px) scale(1);
+    }
+    37.5% {
+        transform: translate(-2px, 2px) scale(1.01);
+    }
+    50% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    62.5% {
+        transform: translate(2px, 2px) scale(0.99);
+    }
+    75% {
+        transform: translate(4px, 0px) scale(1);
+    }
+    87.5% {
+        transform: translate(2px, 2px) scale(1.01);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+.fuzzy-container {
+    flex: 1 1 auto;
+    position: relative;
+    overflow: visible;
+    pointer-events: none;
+    transform-origin: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    max-width: 25vmin;
+    z-index: 0;
+}
+.fuzzy-container:hover, .fuzzy-container:active {
+    z-index: 1;
+}
+.fuzzy-interactive {
+    will-change: transform;
+    animation: 2s fuzzybounce;
+    animation-iteration-count: infinite;
+}
+.fuzzy-container::after {
+    content: "";
+    display: block;
+}
+
+.gene-chart-target {
+    color: green;
+}
+
+
+.fuzzy, .fuzzy-shadow {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.fuzzy {
+    transform: rotateZ(360deg) scale(1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.fuzzy-shadow {
+    transform: rotateX(80deg) translate(25%, 200%);
+    transform-style: preserve-3d;
+}
+
+.fuzzy:hover {
+    transform: rotateZ(360deg) scale(1.1);
+}
+.fuzzy:active {
+    transform: rotateZ(0deg) scale(1.1);
+    transition: transform 0s;
+}
+.fuzzy-list {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+.fuzzy-list-bottom {
+    margin-top: auto;
+}
+.fuzzy path {
+    pointer-events: none;
+}
+.fuzzy .fuzzy-hover {
+    opacity: 0;
+    transition: opacity 0.2s linear;
+    cursor: pointer;
+}
+.fuzzy-interactive .fuzzy-hover {
+    pointer-events: auto;
+    pointer-events: fill;
+}
+.fuzzy-hover:hover {
+    opacity: 0.5;
+    will-change: transform;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+    background-color: white;
+}
+table, th, td {
+    border: 1px solid black;
+}
+
+.gene-chart-display {
+    min-width: 5rem;
+    padding: 0;
+    position: relative;
+}
+.gene-chart {
+    table-layout: fixed;
+    max-width: 100vw;
+    width: 400px;
+}
+
+.gene-chart-display:after {
+    padding-bottom: 100%;
+    content: "";
+    display: block;
+}
+
+.gene-chart-display svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.gene-chart th {
+    text-align: center;
+}
+.gene-chart thead tr:first-child th {
+    font-size: 150%;
+}
+.gene-type-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.hoverable-button {
+    background: white;
+    position: relative;
+    border: 1px black solid;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+.hoverable-button::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    display: block;
+    content: '';
+    transition: opacity 0.2s linear;
+    pointer-events: none;
+}
+.back-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3rem;
+    width: 3rem;
+    font-size: 2rem;
+    padding: 0;
+}
+.back-button span {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+.hoverable-button:not(:disabled):hover {
+    cursor: pointer;
+}
+.hoverable-button:not(:disabled):hover::before {
+    opacity: 0.1;
+}
+.hoverable-button:not(:disabled):active::before {
+    opacity: 0.3;
+}
+.hoverable-button:disabled {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+.hoverable-button:disabled i {
+    opacity: 0.5;
+}
