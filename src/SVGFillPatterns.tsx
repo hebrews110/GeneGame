@@ -6,9 +6,9 @@ const SVGFillPatterns: React.FC<{ backgroundColor?: string; children: (idPrefix:
     const [ idPrefix, setIdPrefix ] = React.useState(shortid.generate());
     return <>
         <defs>
-            <pattern id={`${idPrefix}striped`} width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-                <rect x="0" y="0" width="10" height="10" style={{ fill: backgroundColor }}/>
-                <line x1="0" y1="0" x2="0" y2="10" style={{ stroke: "black", strokeWidth: 2 }}/>
+            <pattern id={`${idPrefix}striped`} width="50" height="50" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="50" height="50" style={{ fill: backgroundColor }}/>
+                <line x1="0" y1="0" x2="0" y2="50" style={{ stroke: "black", strokeWidth: 20, opacity: "0.3" }}/>
             </pattern>
             <pattern id={`${idPrefix}solid`} width="10" height="10" patternUnits="userSpaceOnUse">
                 <rect x="0" y="0" width="10" height="10" style={{ fill: backgroundColor }}/>

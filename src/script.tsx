@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Fuzzy, { FuzzyProps, getRandomFuzzy, breedChild } from './Fuzzy';
+import Fuzzy, { FuzzyProps, getRandomFuzzy, breedChild, fuzzyToString } from './Fuzzy';
 import GeneChart from './GeneChart';
 import GeneType, { availableGeneValues, Gene } from './GeneType';
 import { titleize, getRandomArrayMember, lowercaseFirstLetter } from './utils';
+import isEqual from 'lodash-es/isEqual';
+import FlippableGeneChart from './FlippableGeneChart';
 function genAvailableParents(): FuzzyProps[] {
     var arr = [];
     for(var i = 0; i < 4; i++) {
@@ -12,16 +14,16 @@ function genAvailableParents(): FuzzyProps[] {
     return arr;
 }
 function App() {
-    const [ geneType, setGeneType ] = React.useState(null);
-    const [ targetValue, setTargetValue ] = React.useState(null);
+    const [ currentType, setCurrentType ] = React.useState<GeneType>(0);
+    const initialFuzzy = React.useMemo(getRandomFuzzy, [ getRandomFuzzy ]);
+    const [ targetFuzzy, setTargetFuzzy ] = React.useState(initialFuzzy);
     const [ parents, setParents ] = React.useState<FuzzyProps[]>([]);
     const initialAvailableParents = React.useMemo(genAvailableParents, [ genAvailableParents ]);
     const [ availableParents, setAvailableParents ] = React.useState<FuzzyProps[]>(initialAvailableParents);
     const [ childFuzzy, setChildFuzzy ] = React.useState<FuzzyProps>(null);
     const resetSystem = (resetGeneType?: boolean) => {
         if(resetGeneType) {
-            setGeneType(null);
-            setTargetValue(null);
+            setTargetFuzzy(getRandomFuzzy());
         }
         setParents([]);
         setAvailableParents(genAvailableParents());
@@ -41,42 +43,37 @@ function App() {
     const regenParents = () => {
         setAvailableParents(genAvailableParents());
     };
+    const correctValue = childFuzzy != null ? fuzzyToString(childFuzzy) == fuzzyToString(targetFuzzy) : false;
     React.useEffect(() => {
-        if(geneType != null) {
-            setTargetValue(getRandomArrayMember(availableGeneValues[geneType] as Gene[]).name);
+        if(childFuzzy != null && !correctValue) {
+            window.alert(`Hmm. That doesn't seem like a ${fuzzyToString(targetFuzzy)} child. Click on the child to try two different parents.`);
         }
-    }, [ geneType ]);
-    const correctValue = childFuzzy != null ? childFuzzy[lowercaseFirstLetter(GeneType[geneType])] == targetValue : false;
-    if(geneType != null && parents.length >= 2)
+    }, [ correctValue, childFuzzy ]);
+    if(parents.length >= 2)
         return <>
-            <GeneChart type={geneType} targetValue={targetValue}/>
-            <h2>Parents ({titleize(parents[0][lowercaseFirstLetter(GeneType[geneType])])}, {titleize(parents[1][lowercaseFirstLetter(GeneType[geneType])])}):</h2>
+            <FlippableGeneChart currentType={currentType} setCurrentType={setCurrentType} targetFuzzy={targetFuzzy}/>
+            <h2>Parents:</h2>
             <div className="fuzzy-list">
                 {parents.map(parent => <Fuzzy key={parent.id} {...parent}/>)}
             </div>
-            <h2>Child ({titleize(childFuzzy[lowercaseFirstLetter(GeneType[geneType])])}):</h2>
+            <h2>Child ({fuzzyToString(childFuzzy)}):</h2>
             <div className="fuzzy-list">
                 <Fuzzy {...childFuzzy} animated onClick={resetSystem.bind(this, correctValue)}/>
             </div>
-            <h2>{correctValue ? "Good work! You can click on the child to try a different gene type." : `Hmm. That doesn't seem like a ${targetValue} child. Click on the child to try two different parents.`}</h2>
+            {correctValue && <h2>Good work!</h2>}
+            {correctValue && <button className="hoverable-button" onClick={resetSystem.bind(this, correctValue)}>Play again</button>}
         </>;
-    else if(geneType != null)
+    else
         return <>
-            <GeneChart type={geneType} targetValue={targetValue}/>
-            <h2>We need a {targetValue} child. Choose two appropriate parents:</h2>
+            <FlippableGeneChart currentType={currentType} setCurrentType={setCurrentType} targetFuzzy={targetFuzzy}/>
+            <h3>Target: {fuzzyToString(targetFuzzy)} child.</h3>
+            <p>Choose two appropriate parents:</p>
             <button className="hoverable-button" onClick={regenParents}>New set of parents</button>
             <div className="fuzzy-list">
                 {parents.map(parent => <Fuzzy key={parent.id} {...parent}/>)}
             </div>
             <div className="fuzzy-list fuzzy-list-bottom">
                 {availableParents.map(parent => <Fuzzy key={parent.id} {...parent} onClick={chooseParent.bind(this, parent)} animated/>)}
-            </div>
-        </>;
-    else 
-        return <>
-            <h2>Choose a category:</h2> 
-            <div className="gene-type-list">
-                {Object.keys(GeneType).filter(key => isNaN(key as any)).map(type => <button onClick={setGeneType.bind(void 0, GeneType[type])} className="hoverable-button" key={type}>{titleize(type)}</button>)}
             </div>
         </>;
 }

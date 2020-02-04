@@ -15,6 +15,15 @@ export function getRandomFuzzy(p?: Partial<FuzzyProps>): FuzzyProps {
     });
     return fuzzy as FuzzyProps; 
 }
+export function fuzzyToString(p: FuzzyProps): string {
+    if(typeof p != 'object')
+        return "";
+    let ret = "";
+    Object.keys(GeneType).filter(key => isNaN(key as any)).forEach(geneType => {
+        ret += `${p[lowercaseFirstLetter(geneType)]}, `;
+    });
+    return ret.substr(0, ret.length-2);
+}
 export function breedChild(parents: FuzzyProps[]): FuzzyProps {
     let fuzzy: Partial<FuzzyProps> = {};
     Object.keys(GeneType).filter(key => isNaN(key as any)).forEach(geneType => {
@@ -36,8 +45,6 @@ export function breedChild(parents: FuzzyProps[]): FuzzyProps {
             }
         }
     });
-    console.log(parents);
-    console.log(fuzzy);
     return fuzzy as FuzzyProps;
 }
 const Fuzzy: React.FC<FuzzyProps> = (props) => {

@@ -4,7 +4,6 @@ import SVGFillPatterns from './SVGFillPatterns';
 import { capitalizeFirstLetter, titleize } from './utils';
 
 const GeneChart: React.FC<{ type: GeneType; targetValue?: string; }> = (props) => {
-    console.log(props.targetValue);
     return <table className="gene-chart">
         <thead>
             <tr>

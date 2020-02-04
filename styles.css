@@ -21,7 +21,7 @@
 
 #game-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
@@ -31,6 +31,7 @@
     background-repeat: no-repeat;
     background-position: 50% 100%;
     overflow: hidden;
+    color: white;
 }
 
 html, body, #game-container {
@@ -160,7 +161,7 @@ html, body, #game-container {
 }
 .fuzzy-list {
     display: flex;
-    width: 100%;
+    width: calc(100% - 1rem);
     max-width: 1000px;
     justify-content: center;
     margin-bottom: 1rem;
@@ -208,6 +209,7 @@ table, th, td {
     table-layout: fixed;
     max-width: 100vw;
     width: 400px;
+    color: black;
 }
 
 .gene-chart-display:after {
@@ -283,4 +285,33 @@ table, th, td {
 }
 .hoverable-button:disabled i {
     opacity: 0.5;
+}
+
+.gene-chart-flippable {
+    width: 100vw;
+    min-width: 0;
+    position: relative;
+    max-width: 480px;
+}
+.gene-chart-flippable .gene-chart {
+    width: 100%;
+    min-width: 0;
+}
+.gene-chart-flippable .gene-chart-display {
+    min-width: 0;
+}
+
+.gene-chart-flippable .hoverable-button {
+    margin: 0;
+    flex: none;
+    position: absolute;
+    top: 0;
+    height: 2.5rem;
+    border-radius: 0;
+}
+.gene-chart-flippable-left {
+    left: 0;
+}
+.gene-chart-flippable-right {
+    right: 0;
 }
