@@ -68,7 +68,7 @@ function App() {
             <FlippableGeneChart currentType={currentType} setCurrentType={setCurrentType} targetFuzzy={targetFuzzy}/>
             <h3>Target: {fuzzyToString(targetFuzzy)} child.</h3>
             <p>Choose two appropriate parents:</p>
-            <button className="hoverable-button" onClick={regenParents}>New set of parents</button>
+            {parents.length == 0 && <button className="hoverable-button" onClick={regenParents}>New set of parents</button>}
             <div className="fuzzy-list">
                 {parents.map(parent => <Fuzzy key={parent.id} {...parent}/>)}
             </div>
